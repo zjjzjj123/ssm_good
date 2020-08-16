@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+    <properties resource="dbconfig.properties"></properties>
+    <!-- 数据库连接信息 -->
+    <context id="DB2Tables" targetRuntime="MyBatis3">
+        
+        <commentGenerator>
+            <!-- 抑制所有的注释信息 -->
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+        <jdbcConnection driverClass="${jdbc.driver}"
+                        connectionURL="${jdbc.url}"
+                        userId="${jdbc.username}"
+                        password="${jdbc.password}">
+        </jdbcConnection>
+
+        <javaTypeResolver >
+            <property name="forceBigDecimals" value="false" />
+        </javaTypeResolver>
+
+
+        <!-- javaBean的生成位置 例如dao -->
+        <!-- 在那个工程中  生成的bean放到哪里-->
+        <javaModelGenerator targetPackage="com.heima.domain"
+                            targetProject="src\main\java">
+            <property name="enableSubPackages" value="true" />
+            <property name="trimStrings" value="true" />
+        </javaModelGenerator>
+
+        <!-- 指定sql的映射文件 专门写sql的xml-->
+        <sqlMapGenerator targetPackage="com.heima.dao"  targetProject="src\main\resources">
+            <property name="enableSubPackages" value="true" />
+        </sqlMapGenerator>
+
+        <!-- 客户端的接口生成目录指定  生成接口的dao -->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.heima.dao"  targetProject="src\main\java">
+            <property name="enableSubPackages" value="true" />
+        </javaClientGenerator>
+
+        <!-- 指定每个表的生成策略  对应表的名字->生成的bean类的名字 -->
+        <table tableName="user" domainObjectName="User"></table>
+        <table tableName="items" domainObjectName="Items"></table>
+        <table tableName="orderdetail" domainObjectName="Orderdetail"></table>
+        <table tableName="orders" domainObjectName="Orders"></table>
+
+    </context>
+</generatorConfiguration>
