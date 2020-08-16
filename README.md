@@ -1,10 +1,36 @@
 ## 一个案例带你快速入门SSM开发
 
-**写在前面的话:**关于SSM框架的工程搭建请点击这里前往我的博客[SSM整合工程的搭建](http://codingxiaxw.cn/2016/11/15/44-ssm%E7%9A%84%E6%95%B4%E5%90%88/)
+**写在前面的话:**[Github@codingXiaxw](https://github.com/codingXiaxw)主要是这位大神的著作，不过，将其改成使用maven管理项目会更加的方便。其他和原github几乎没有区别 。
+
+**遇到的问题：**1.配置问题 在整个spring和springmvc的时候，利用springmvc的web.xml添加监听器从而对spring的配置文件进行读取，但是，在dispatcherServlet的mapping处的标签千万别加*，不然单独运行springmvc可以整合到spring上就会报错。
+
+~~~
+    <servlet-mapping>
+        <servlet-name>dispatcherServlet</servlet-name>
+        <url-pattern>/</url-pattern> <!-- 这里千万别加* 坑死了-->
+    </servlet-mapping>
+~~~
+
+2.在项目的的访问url时，最好加上下文路径${pageContext.request.contextPath}
+
+3.pom文件的内容一定要添加全，特别是在springmvc时 jstl和jsp-api一定不要忘记添加 ，不添加在跳转网页的时候出现错误。
+
+4.在商品修改界面，由于有修改商品的创建日期，但是，通过页面返回的字符串类型，例如2020-12-12 11:30:12,而对应javaBean中Date是不能识别的，所以直接修改提交会出现错误，后面有通过格式转换器的方式将字符串类型转化成Date类型。输入格式看清楚 ，**是2020-12-12 11-30-12** ，不是2020-12-12 11:30:12。当然你也可以自己修改转换文件，按照自己的风格来
 
 ## 开发环境
-IDEA Spring3.x+SpringMVC+Mybatis  
-没有用到maven管理工具。
+IDEA Spring5.x+SpringMVC+Mybatis3.4.5  + MAVEN3.4.5  
+
+**使用maven3.4.5 的细节**
+
+1.IDE有时候是不支持MAVEN的搞版本的，如果使用不成功，可以更改到低版本进行尝试
+
+2.使用maven注意的细节，文件目录结构一定要按照标准来，不然在使用test的时候会出现找不到测试文件。test中的目录要和main中的目录一样，类别的名字最好是以**Test**结尾。
+
+![image-20200816091858229](C:\Users\chen\AppData\Roaming\Typora\typora-user-images\image-20200816091858229.png)
+
+3.每次在运行时，如果运行前对工程进行了更改，前更改前是有错误的，好先进行clean再取运行，避免很多 麻烦。
+
+
 
 ## 1.实现商品的列表展示
 
@@ -463,7 +489,7 @@ model.addAttribute("item", item);
 @RequestParam 指定request请求的参数名绑定到哪个方法形参上。
 
 对于必须要传的参数，通过@RequestParam中属性required设置为true，如果不传此参数则报错。
- 
+
 对于有些参数如果不传入，还需要设置默认值，使用@RequestParam中属性defaultvalue设置默认值。
 
 例如Controller中的方法:
